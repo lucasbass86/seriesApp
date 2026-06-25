@@ -1,0 +1,14 @@
+export 'package:seriesapp/models/historic_search_model.dart';
+export 'package:seriesapp/models/backdrop_model.dart';
+export 'package:seriesapp/models/base_model.dart';
+export 'package:seriesapp/models/cast_model.dart';
+export 'package:seriesapp/models/credits_model.dart';
+export 'package:seriesapp/models/favorite_model.dart';
+export 'package:seriesapp/models/following_model.dart';
+export 'package:seriesapp/models/genre_model.dart';
+export 'package:seriesapp/models/movie_collection_model.dart';
+export 'package:seriesapp/models/movie_credits.dart';
+export 'package:seriesapp/models/movie_model.dart';
+export 'package:seriesapp/models/multi_search_model.dart';
+export 'package:seriesapp/models/person_model.dart';
+export 'package:seriesapp/models/tv_model.dart';

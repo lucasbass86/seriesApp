@@ -1,0 +1,13 @@
+export 'package:seriesapp/pages/no_connection_page.dart';
+export 'package:seriesapp/pages/tv_detail_page.dart';
+export 'package:seriesapp/pages/favorite_page.dart';
+export 'package:seriesapp/pages/images_page.dart';
+export 'package:seriesapp/pages/top_page.dart';
+export 'package:seriesapp/pages/cast_page.dart';
+export 'package:seriesapp/pages/movie_detail_page.dart';
+export 'package:seriesapp/pages/genre_detail_page.dart';
+export 'package:seriesapp/pages/genre_page.dart';
+export 'package:seriesapp/pages/following_page.dart';
+export 'package:seriesapp/pages/search_page.dart';
+export 'package:seriesapp/pages/settings_page.dart';
+export 'package:seriesapp/pages/home_page.dart';
