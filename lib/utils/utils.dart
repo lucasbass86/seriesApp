@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:seriesapp/utils/enum.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as p;
 
 class Utils {

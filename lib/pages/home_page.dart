@@ -44,7 +44,9 @@ class _HomePageState extends State<HomePage> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Future.delayed(const Duration(seconds: 1), () async {
           if (context.mounted) {
+            // ignore: use_build_context_synchronously
             await _checkLicense(context);
+            // ignore: use_build_context_synchronously
             await _checkUpdates(context);
           }
         });
@@ -162,6 +164,7 @@ class _HomePageState extends State<HomePage> {
           }
           if (!hasUpdate && context.mounted) {
             await _checkBackUp(context);
+            // ignore: use_build_context_synchronously
             await _checkNewCredits(context);
           }
         }

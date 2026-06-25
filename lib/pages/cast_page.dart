@@ -38,6 +38,7 @@ class _CastPageState extends State<CastPage> {
       await _getData();
       //INSERTAR EL HISTORICO:
       if (context.mounted) {
+        // ignore: use_build_context_synchronously
         HistoricProvider historicProvider = Provider.of<HistoricProvider>(context, listen: false);
         historicProvider.addHistoric(person!.name, mediaType: 'person', idMediaType: person!.id);
       }

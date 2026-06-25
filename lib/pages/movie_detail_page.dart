@@ -6,7 +6,6 @@ import 'package:seriesapp/dialogs/dialogs.dart';
 import 'package:seriesapp/models/_models.dart';
 import 'package:seriesapp/pages/_pages.dart';
 import 'package:seriesapp/providers/_providers.dart';
-import 'package:seriesapp/providers/following_provider.dart';
 import 'package:seriesapp/services/movie_service.dart';
 import 'package:seriesapp/utils/utils.dart';
 import 'package:seriesapp/widgets/_widgets.dart';
@@ -40,6 +39,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
       await _getData();
       //INSERTAR EL HISTORICO:
       if (context.mounted) {
+        // ignore: use_build_context_synchronously
         HistoricProvider historicProvider = Provider.of<HistoricProvider>(context, listen: false);
         historicProvider.addHistoric(
           baseModel!.name,

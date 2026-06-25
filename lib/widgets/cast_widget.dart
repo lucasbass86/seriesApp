@@ -94,7 +94,14 @@ class CastWidget extends StatelessWidget {
                       const Expanded(child: SizedBox(height: 1)),
                       Align(
                         alignment: Alignment.bottomRight,
-                        child: Text('+ info', style: TextStyle(color: Colors.lightBlue)),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.lightBlue),
+                          ),
+                          child: Text('+ info', style: TextStyle(color: Colors.lightBlue)),
+                        ),
                       ),
                     ],
                   ),

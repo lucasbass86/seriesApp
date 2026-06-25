@@ -13,14 +13,10 @@ import 'package:seriesapp/services/movie_service.dart';
 import 'package:seriesapp/themes/themes.dart';
 import 'package:seriesapp/utils/utils.dart';
 
-//TODO: GUARDAR HISTORICO DE BUSQUEDAS, SI SON PERSONAS, PELICULAS O SERIES, PONER EL TIPO PARA
-//CARGAR DIRECTAMENTE LA FICHA.
-
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

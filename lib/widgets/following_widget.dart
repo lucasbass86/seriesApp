@@ -14,7 +14,7 @@ class FollowingWidget extends StatelessWidget {
     FollowingProvider followingProvider = Provider.of(context, listen: false);
     TimeOfDay visualizado = TimeOfDay(hour: following.hour!, minute: following.minute!);
     return Card(
-      elevation: 17,
+      elevation: 13,
       shadowColor: Utils.naranjaClarito,
       shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(20)),
       child: Material(
@@ -22,7 +22,7 @@ class FollowingWidget extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
           child: SizedBox(
-            height: 190,
+            height: 210,
             child: Row(
               children: [
                 ClipRRect(
@@ -35,7 +35,7 @@ class FollowingWidget extends StatelessWidget {
                             imageBuilder:
                                 (context, imageProvider) => Container(
                                   width: 130,
-                                  height: 190,
+                                  height: 210,
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                       image: imageProvider,
@@ -64,72 +64,70 @@ class FollowingWidget extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(following.model.name, style: TextStyle(fontSize: 17)),
+                        Text(
+                          following.model.name,
+                          style: TextStyle(fontSize: 17),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                         Expanded(
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               if (following.model.mediaType == 'tv')
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                Column(
                                   children: [
-                                    Flexible(
-                                      flex: 1,
-                                      child: DropdownButton(
+                                    DropdownButton(
+                                      underline: Container(),
+                                      borderRadius: BorderRadius.circular(20),
+                                      dropdownColor: Utils.naranjaSecundario,
+                                      value: following.selectedSeason,
+                                      isExpanded: true,
+                                      items:
+                                          following.seasons!
+                                              .map(
+                                                (s) => DropdownMenuItem(
+                                                  value: s,
+                                                  child: Text(
+                                                    s.name,
+                                                    style: TextStyle(fontSize: 13),
+                                                  ),
+                                                ),
+                                              )
+                                              .toList(),
+                                      onChanged: (value) {
+                                        followingProvider.updateFollowing(
+                                          following,
+                                          selectedSeason: value,
+                                        );
+                                      },
+                                    ),
+                                    if (following.selectedSeason != null)
+                                      DropdownButton(
                                         underline: Container(),
                                         borderRadius: BorderRadius.circular(20),
                                         dropdownColor: Utils.naranjaSecundario,
-                                        value: following.selectedSeason,
-                                        items:
-                                            following.seasons!
-                                                .map(
-                                                  (s) => DropdownMenuItem(
-                                                    value: s,
-                                                    child: Text(
-                                                      s.name,
-                                                      style: TextStyle(fontSize: 13),
-                                                    ),
-                                                  ),
-                                                )
-                                                .toList(),
+                                        value: following.selectedChapter,
+                                        isExpanded: true,
+                                        items: List.generate(
+                                          following.selectedSeason!.episodeCount,
+                                          (index) => DropdownMenuItem(
+                                            value: index + 1,
+                                            child: Text(
+                                              'Capítulo ${index + 1}',
+                                              style: TextStyle(fontSize: 13),
+                                            ),
+                                          ),
+                                        ),
                                         onChanged: (value) {
                                           followingProvider.updateFollowing(
                                             following,
-                                            selectedSeason: value,
+                                            selectedChapter: value,
                                           );
                                         },
                                       ),
-                                    ),
-                                    if (following.selectedSeason != null)
-                                      Flexible(
-                                        flex: 1,
-                                        child: DropdownButton(
-                                          underline: Container(),
-                                          borderRadius: BorderRadius.circular(20),
-                                          dropdownColor: Utils.naranjaSecundario,
-                                          value: following.selectedChapter,
-                                          items: List.generate(
-                                            following.selectedSeason!.episodeCount,
-                                            (index) => DropdownMenuItem(
-                                              value: index + 1,
-                                              child: Text(
-                                                'Capítulo ${index + 1}',
-                                                style: TextStyle(fontSize: 13),
-                                              ),
-                                            ),
-                                          ),
-                                          onChanged: (value) {
-                                            followingProvider.updateFollowing(
-                                              following,
-                                              selectedChapter: value,
-                                            );
-                                          },
-                                        ),
-                                      ),
                                   ],
                                 ),
-                              // const SizedBox(height: 10),
                               Row(
                                 spacing: 20,
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -171,7 +169,6 @@ class FollowingWidget extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 5),
                         Align(
                           alignment: Alignment.bottomRight,
                           child: GestureDetector(
@@ -190,7 +187,14 @@ class FollowingWidget extends StatelessWidget {
                                 );
                               }
                             },
-                            child: Text('+ info', style: TextStyle(color: Colors.lightBlue)),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: Colors.lightBlue),
+                              ),
+                              child: Text('+ info', style: TextStyle(color: Colors.lightBlue)),
+                            ),
                           ),
                         ),
                       ],
