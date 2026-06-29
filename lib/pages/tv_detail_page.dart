@@ -387,6 +387,7 @@ class _BottomButtons extends StatelessWidget {
     final tv = state.tv;
     final FollowingProvider provider = Provider.of(context);
     final FollowingModel? following = provider.containsFollowing(baseModel!.id);
+    TimeOfDay visualizado = TimeOfDay(hour: 0, minute: 0);
 
     return Column(
       children: [
@@ -426,12 +427,6 @@ class _BottomButtons extends StatelessWidget {
                     ),
                     context: context,
                     builder: (context) {
-                      final TextEditingController hoursController = TextEditingController(
-                        text: '0',
-                      );
-                      final TextEditingController minutesController = TextEditingController(
-                        text: '0',
-                      );
                       Season? season = tv != null ? tv.seasons[0] : null;
                       int? chapter = 1;
 
@@ -461,116 +456,110 @@ class _BottomButtons extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: Padding(
-                                    padding: const EdgeInsets.all(10),
+                                    padding: const EdgeInsets.all(20),
                                     child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Flexible(
-                                              flex: 1,
-                                              child: DropdownButton(
-                                                underline: Container(),
-                                                borderRadius: BorderRadius.circular(20),
-                                                dropdownColor: Utils.naranjaSecundario,
-                                                value: season,
-                                                items:
-                                                    tv?.seasons
-                                                        .map(
-                                                          (s) => DropdownMenuItem(
-                                                            value: s,
-                                                            child: Text(s.name),
-                                                          ),
-                                                        )
-                                                        .toList() ??
-                                                    [],
-                                                onChanged: <Season>(value) {
-                                                  setState(() {
-                                                    season = value!;
-                                                    chapter = 1;
-                                                  });
-                                                },
-                                              ),
-                                            ),
-                                            if (season != null)
-                                              Flexible(
-                                                flex: 1,
-                                                child: DropdownButton(
-                                                  underline: Container(),
-                                                  borderRadius: BorderRadius.circular(20),
-                                                  dropdownColor: Utils.naranjaSecundario,
-                                                  value: chapter,
-                                                  items: List.generate(
-                                                    season!.episodeCount,
-                                                    (index) => DropdownMenuItem(
-                                                      value: index + 1,
-                                                      child: Text('Capítulo ${index + 1}'),
+                                        DropdownButton(
+                                          underline: Container(),
+                                          borderRadius: BorderRadius.circular(20),
+                                          dropdownColor: Utils.naranjaSecundario,
+                                          value: season,
+                                          items:
+                                              tv?.seasons
+                                                  .map(
+                                                    (s) => DropdownMenuItem(
+                                                      value: s,
+                                                      child: Text(s.name),
                                                     ),
+                                                  )
+                                                  .toList() ??
+                                              [],
+                                          onChanged: <Season>(value) {
+                                            setState(() {
+                                              season = value!;
+                                              chapter = 1;
+                                            });
+                                          },
+                                        ),
+                                        if (season != null)
+                                          DropdownButton(
+                                            underline: Container(),
+                                            borderRadius: BorderRadius.circular(20),
+                                            dropdownColor: Utils.naranjaSecundario,
+                                            value: chapter,
+                                            items: List.generate(
+                                              season!.episodeCount,
+                                              (index) => DropdownMenuItem(
+                                                value: index + 1,
+                                                child: Text('Capítulo ${index + 1}'),
+                                              ),
+                                            ),
+                                            onChanged: (value) {
+                                              setState(() => chapter = value!);
+                                            },
+                                          ),
+                                        Row(
+                                          spacing: 20,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Text('Visualizado:'),
+                                            GestureDetector(
+                                              onTap: () async {
+                                                final resp = await showTimePicker(
+                                                  context: context,
+                                                  cancelText: 'Cancelar',
+                                                  confirmText: 'Aceptar',
+                                                  switchToInputEntryModeIcon: null,
+                                                  switchToTimerEntryModeIcon: null,
+                                                  hourLabelText: 'Hora',
+                                                  minuteLabelText: 'Minuto',
+                                                  barrierColor: Utils.naranjaClarito.withAlpha(100),
+                                                  helpText: 'Tiempo de visionado',
+                                                  initialEntryMode: TimePickerEntryMode.dialOnly,
+                                                  initialTime: TimeOfDay(
+                                                    hour: visualizado.hour,
+                                                    minute: visualizado.minute,
                                                   ),
-                                                  onChanged: (value) {
-                                                    setState(() => chapter = value!);
-                                                  },
+                                                );
+                                                if (resp != null) {
+                                                  setState(() {
+                                                    visualizado = resp;
+                                                  });
+                                                }
+                                              },
+                                              child: Text(
+                                                Utils.timeOfDayToString(visualizado),
+                                                style: TextStyle(
+                                                  fontSize: 30,
+                                                  color: Utils.naranjaPrincipal,
                                                 ),
                                               ),
-                                            if (season == null)
-                                              const Flexible(flex: 1, child: SizedBox()),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 20),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Column(
-                                              children: [
-                                                const Text('Hora'),
-                                                NumericUpDownWidget(
-                                                  controller: hoursController,
-                                                  minValue: 0,
-                                                  maxValue: 10,
-                                                ),
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                const Text('Minuto'),
-                                                NumericUpDownWidget(
-                                                  controller: minutesController,
-                                                  minValue: 0,
-                                                  maxValue: 60,
-                                                  onChange: (value) {
-                                                    setState(() {
-                                                      if (value == 60) {
-                                                        minutesController.text = '0';
-                                                        hoursController.text =
-                                                            (int.parse(hoursController.text) + 1)
-                                                                .toString();
-                                                      }
-                                                    });
-                                                  },
-                                                ),
-                                              ],
                                             ),
                                           ],
                                         ),
                                         const Expanded(child: SizedBox(height: 1)),
-                                        ButtonWidget(
-                                          text: 'Aceptar',
-                                          onTap: () {
-                                            final follow = FollowingModel(
-                                              id: const Uuid().v4(),
-                                              model: baseModel,
-                                            );
-                                            follow.hour = int.parse(hoursController.text);
-                                            follow.minute = int.parse(minutesController.text);
-                                            follow.selectedChapter = chapter;
-                                            follow.seasons = tv?.seasons;
-                                            follow.selectedSeason = season;
-                                            provider.addFollowing(follow);
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              Utils.snackBar('Serie añadida para seguir'),
-                                            );
-                                            Navigator.pop(context);
-                                          },
+                                        Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: ButtonWidget(
+                                            text: 'Aceptar',
+                                            onTap: () {
+                                              final follow = FollowingModel(
+                                                id: const Uuid().v4(),
+                                                model: baseModel,
+                                              );
+                                              follow.hour = visualizado.hour;
+                                              follow.minute = visualizado.minute;
+                                              follow.selectedChapter = chapter;
+                                              follow.seasons = tv?.seasons;
+                                              follow.selectedSeason = season;
+                                              provider.addFollowing(follow);
+                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                Utils.snackBar('Serie añadida para seguir'),
+                                              );
+                                              Navigator.pop(context);
+                                            },
+                                          ),
                                         ),
                                       ],
                                     ),

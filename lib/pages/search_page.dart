@@ -172,6 +172,7 @@ class _SearchPageState extends State<SearchPage> {
     return ListView.separated(
       physics: const BouncingScrollPhysics(),
       itemCount: historicProvider.historicSearch.length,
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       itemBuilder: (context, index) {
         final HistoricSearchModel historic = historicProvider.historicSearch[index];
         return ListTile(
